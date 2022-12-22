@@ -11,8 +11,22 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
-      - name: Publish NuGet
-        uses: brandedoutcast/publish-nuget@v2.5.5
-        with:
-          PROJECT_FILE_PATH: IPC-2581/IPC-2581.csproj
-          NUGET_KEY: ${{ secrets.NUGETKEY }}
+        
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.1.1
+
+      - name: NuGet restore
+        run: nuget restore IPC-2581.sln
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+
+      - name: Build
+        run: dotnet build IPC-2581/IPC-2581.csproj
+      
+      - name: NuGet pack
+        run: nuget pack IPC-2581/IPC-2581.csproj -OutputDirectory nuget
+
+      - name: NuGet publish
+        run: nuget push nuget\**\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGETKEY }}
+
