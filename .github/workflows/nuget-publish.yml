@@ -1,0 +1,16 @@
+name: Publish NuGet
+
+on:
+  push:
+    branches:
+    - master
+    
+jobs:
+  publish-nuget:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish NuGet
+        uses: brandedoutcast/publish-nuget@v2.5.5
+        with:
+          PROJECT_FILE_PATH: IPC-2581/IPC-2581.csproj
+          NUGET_KEY: ${{ secrets.NUGETKEY }}
