@@ -9,6 +9,8 @@ jobs:
   publish-nuget:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
       - name: Publish NuGet
         uses: brandedoutcast/publish-nuget@v2.5.5
         with:
